@@ -1,5 +1,5 @@
-import { SendHoldApp } from "@/components/SendHoldApp";
+import { Playground } from "@/components/Playground";
 
 export default function Page() {
-  return <SendHoldApp />;
+  return <Playground />;
 }

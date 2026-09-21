@@ -1,10 +1,10 @@
-# Send / Hold
+# Jev playground
 
-Jev judges a draft. Code decides whether you send it.
+A UI over TypeSafe's System One API. You set a **state** (text or JSON) and a map of typed **questions** (noul / choice / score). Jev answers them in one parallel pass. No prose comes back.
 
-Paste a Slack, email, tweet, or PR comment. One call to TypeSafe's System One model (`typesafe/jev-1.13` via OpenRouter) answers twelve typed questions in parallel — yes/no probabilities, rubric scores, a message kind. **No prose comes back.** A small policy in `src/lib/policy.ts` composes those numbers into SEND, HOLD, or DON'T.
+Send/Hold is a preset, not the app: twelve questions on a draft, then `src/lib/policy.ts` composes SEND / HOLD / DON'T. Load a different preset, or build your own request.
 
-The interesting part is not the model call. It is that the gate is ordinary code with named thresholds you can change without touching a prompt.
+Calls `POST https://openrouter.ai/api/alpha/decisions` as `typesafe/jev-1.13`.
 
 ## Run
 
@@ -16,15 +16,14 @@ npm test
 npm run dev
 ```
 
-Open [http://localhost:3007](http://localhost:3007).
+Open [http://localhost:3007](http://localhost:3007). ⌘↵ runs.
 
 ## Shape
 
 | File | What it is |
 | --- | --- |
-| `src/lib/questions.ts` | The twelve questions Jev sees |
-| `src/lib/policy.ts` | The gate. Thresholds live here |
-| `src/lib/jev.ts` | `POST https://openrouter.ai/api/alpha/decisions` |
+| `src/lib/schema.ts` | Request validation — the API contract |
+| `src/lib/presets.ts` | Starting points, including Send/Hold |
+| `src/lib/policy.ts` | Send/Hold gate. Only runs when that question set is intact |
+| `src/lib/jev.ts` | OpenRouter decisions client |
 | `src/app/api/evaluate/route.ts` | Server route. Key never hits the browser |
-
-Jev cannot generate a rewrite. If a draft is held, you edit it.

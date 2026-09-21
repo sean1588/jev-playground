@@ -14,6 +14,9 @@ export type Kind = (typeof KINDS)[number];
 export const VERDICTS = ["send", "hold", "dont"] as const;
 export type Verdict = (typeof VERDICTS)[number];
 
+export const QUESTION_TYPES = ["noul", "choice", "score"] as const;
+export type QuestionType = (typeof QUESTION_TYPES)[number];
+
 export function isChannel(value: unknown): value is Channel {
   return typeof value === "string" && (CHANNELS as readonly string[]).includes(value);
 }
@@ -21,6 +24,30 @@ export function isChannel(value: unknown): value is Channel {
 export function isKind(value: unknown): value is Kind {
   return typeof value === "string" && (KINDS as readonly string[]).includes(value);
 }
+
+export function isQuestionType(value: unknown): value is QuestionType {
+  return typeof value === "string" && (QUESTION_TYPES as readonly string[]).includes(value);
+}
+
+export type NoulQuestion = {
+  type: "noul";
+  instructions: string;
+  criteria?: { true: string; false: string };
+};
+
+export type ChoiceQuestion = {
+  type: "choice";
+  instructions: string;
+  criteria: Record<string, string | null>;
+};
+
+export type ScoreQuestion = {
+  type: "score";
+  instructions: string;
+  criteria: string[];
+};
+
+export type Question = NoulQuestion | ChoiceQuestion | ScoreQuestion;
 
 export type NoulAnswer = {
   type: "noul";
@@ -54,6 +81,12 @@ export type JevResponse = {
   };
   id?: string;
   provider?: string;
+};
+
+export type EvaluateRequest = {
+  model: string;
+  state: string | Record<string, unknown> | unknown[];
+  questions: Record<string, Question>;
 };
 
 export type Signals = {
@@ -95,9 +128,9 @@ export type Gate = {
 };
 
 export type Evaluation = {
-  gate: Gate;
-  signals: Signals;
+  answers: Record<string, JevAnswer>;
   latencyMs: number;
   usage: JevResponse["usage"];
   model: string;
+  gate: Gate | null;
 };

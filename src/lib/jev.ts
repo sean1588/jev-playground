@@ -1,8 +1,7 @@
-import { questionsForJev, CHANNEL_STATE } from "./questions";
-import type { Channel, JevResponse } from "./types";
+import { DEFAULT_MODEL } from "./schema";
+import type { EvaluateRequest, JevResponse } from "./types";
 
 const OPENROUTER_DECISIONS = "https://openrouter.ai/api/alpha/decisions";
-export const JEV_MODEL = "typesafe/jev-1.13";
 
 export class JevError extends Error {
   readonly status: number;
@@ -14,10 +13,7 @@ export class JevError extends Error {
   }
 }
 
-export async function evaluateWithJev(input: {
-  channel: Channel;
-  draft: string;
-}): Promise<JevResponse> {
+export async function evaluateWithJev(request: EvaluateRequest): Promise<JevResponse> {
   const key = process.env.OPENROUTER_API_KEY;
   if (!key) {
     throw new JevError("OPENROUTER_API_KEY is not set on the server.", 500);
@@ -29,16 +25,12 @@ export async function evaluateWithJev(input: {
       Authorization: `Bearer ${key}`,
       "Content-Type": "application/json",
       "HTTP-Referer": "https://github.com/sean1588/send-hold",
-      "X-Title": "Send/Hold",
+      "X-Title": "Jev playground",
     },
     body: JSON.stringify({
-      model: JEV_MODEL,
-      state: {
-        channel: input.channel,
-        channel_context: CHANNEL_STATE[input.channel],
-        draft: input.draft,
-      },
-      questions: questionsForJev(),
+      model: request.model || DEFAULT_MODEL,
+      state: request.state,
+      questions: request.questions,
     }),
   });
 

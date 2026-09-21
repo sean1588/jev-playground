@@ -1,15 +1,8 @@
-import type { Channel, Kind } from "./types";
+import type { Channel, Kind, Question } from "./types";
 
 export const HEAT_LEVELS = ["calm", "firm", "sharp", "hostile"] as const;
 export const LENGTH_LEVELS = ["too terse", "tight", "long", "wall of text"] as const;
 export const HEDGE_LEVELS = ["blunt", "direct", "hedged", "lost in hedges"] as const;
-
-export const CHANNEL_LABEL: Record<Channel, string> = {
-  slack: "Slack",
-  email: "Email",
-  tweet: "Tweet",
-  pr: "PR comment",
-};
 
 export const CHANNEL_STATE: Record<Channel, string> = {
   slack: "A Slack message to coworkers. It will sit on the record in a work channel.",
@@ -17,35 +10,6 @@ export const CHANNEL_STATE: Record<Channel, string> = {
   tweet: "A public post on X. Anyone can screenshot it.",
   pr: "A comment on a pull request. The author and other reviewers will read it.",
 };
-
-export const KIND_LABEL: Record<Kind, string> = {
-  ask: "Ask",
-  update: "Update",
-  disagreement: "Disagreement",
-  apology: "Apology",
-  vent: "Vent",
-  other: "Other",
-};
-
-type NoulQuestion = {
-  type: "noul";
-  instructions: string;
-  criteria: { true: string; false: string };
-};
-
-type ScoreQuestion = {
-  type: "score";
-  instructions: string;
-  criteria: string[];
-};
-
-type ChoiceQuestion = {
-  type: "choice";
-  instructions: string;
-  criteria: Record<string, string>;
-};
-
-export type Question = NoulQuestion | ScoreQuestion | ChoiceQuestion;
 
 export type SignalPolarity = "good" | "bad" | "neutral";
 

@@ -15,9 +15,9 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Send/Hold",
+  title: "Jev",
   description:
-    "Jev judges a draft. Code decides whether you send it. Typed decisions, no rewrite.",
+    "A UI over TypeSafe Jev: state and typed questions in, calibrated answers out.",
 };
 
 export default function RootLayout({
