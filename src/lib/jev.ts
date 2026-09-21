@@ -24,7 +24,7 @@ export async function evaluateWithJev(request: EvaluateRequest): Promise<JevResp
     headers: {
       Authorization: `Bearer ${key}`,
       "Content-Type": "application/json",
-      "HTTP-Referer": "https://github.com/sean1588/send-hold",
+      "HTTP-Referer": "https://github.com/sean1588/jev-playground",
       "X-Title": "Jev playground",
     },
     body: JSON.stringify({
